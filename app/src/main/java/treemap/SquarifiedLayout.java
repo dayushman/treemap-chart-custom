@@ -17,7 +17,7 @@ public class SquarifiedLayout extends AbstractMapLayout
     public void layout(Mappable[] items, Rect bounds)
     {
         
-        layout(sortDescending(items),0,items.length-1,bounds);
+        layout(items,0,items.length-1,bounds);
     }
     
     public void layout(Mappable[] items, int start, int end, Rect bounds)

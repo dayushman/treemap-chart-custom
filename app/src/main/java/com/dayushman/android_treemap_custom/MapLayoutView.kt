@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import treemap.*
 import kotlin.math.max
@@ -36,22 +37,14 @@ internal class MapLayoutView : View {
     constructor(context: Context?, model: TreeModel) : super(context) {
         mapLayout = SquarifiedLayout()
         mappableItems = model.treeItems //getItems();
-
-        // Set up the Paint for the rectangle background
-        mRectBackgroundPaint = Paint()
-        mRectBackgroundPaint!!.color = Color.CYAN
-        mRectBackgroundPaint!!.style = Paint.Style.FILL
-
-        // Set up the Paint for the rectangle border
-        mRectBorderPaint = Paint()
-        mRectBorderPaint!!.color = Color.BLACK
-        mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
-        mRectBorderPaint!!.strokeWidth = 0f // single-pixel outline
-
-        // Set up the Paint for the text label
         mTextPaint = Paint()
-        mTextPaint!!.color = Color.BLACK
-        mTextPaint!!.textSize = 20f
+        mRectBackgroundPaint = Paint()
+        mRectBorderPaint = Paint()
+
+
+
+
+
     }
 
     public override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -67,6 +60,33 @@ internal class MapLayoutView : View {
         // Draw all the rectangles and their labels
         for (i in mappableItems.indices) {
             val item = mappableItems[i] as AndroidMapItem
+            Log.e("TAG", "onDraw: ${item.getLabel()} $i", )
+            if(item.value < 0){
+                // Set up the Paint for the rectangle background
+                mRectBackgroundPaint!!.color = resources.getColor(R.color.red)
+                mRectBackgroundPaint!!.style = Paint.Style.FILL
+
+                // Set up the Paint for the rectangle border
+                mRectBorderPaint!!.color = Color.BLACK
+                mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
+                mRectBorderPaint!!.strokeWidth = 0f // single-pixel outline
+
+                // Set up the Paint for the text label
+                mTextPaint!!.color = Color.BLACK
+                mTextPaint!!.textSize = 20f
+            }else{
+                // Set up the Paint for the rectangle background
+                mRectBackgroundPaint!!.color = resources.getColor(R.color.green)
+                mRectBackgroundPaint!!.style = Paint.Style.FILL
+
+                // Set up the Paint for the rectangle border
+                mRectBorderPaint!!.color = Color.BLACK
+                mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
+                mRectBorderPaint!!.strokeWidth = 0f // single-pixel outline
+
+                // Set up the Paint for the text label
+                mTextPaint!!.color = Color.BLACK
+            }
             drawRectangle(canvas, item.getBoundsRectF())
             drawText(canvas, item.getLabel(), item.getBoundsRectF())
         }
@@ -84,7 +104,7 @@ internal class MapLayoutView : View {
         // Don't draw text for small rectangles
         if (rectF.width() > 30) {
             val textSize = max(rectF.width() / 7, 12f)
-            mTextPaint!!.textSize = textSize
+            mTextPaint!!.textSize = 60f
             canvas.drawText(
                 text, rectF.left + 2, rectF.top + textSize / 2 + rectF.height() / 2,
                 mTextPaint!!

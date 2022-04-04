@@ -20,7 +20,7 @@ import treemap.MapItem
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AndroidMapItem(weight: Double, private val label: String) : MapItem(),
+class AndroidMapItem( private val label: String,val value: Double, weight: Double) : MapItem(),
     AndroidMappable, Comparable<AndroidMapItem> {
     private val weight = 0.0
     override fun getLabel(): String {
