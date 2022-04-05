@@ -38,6 +38,14 @@ class AndroidMapItem( private val label: String,val value: Double, weight: Doubl
         )
     }
 
+    fun isClicked(x : Double,y : Double) : Boolean{
+        if(bounds.x < x && ((bounds.x + bounds.w)>=x)){
+            if(bounds.y < y && ((bounds.y+bounds.h)>=y))
+                return true
+        }
+        return false
+    }
+
     override fun toString(): String {
         return AndroidMapItem::class.java.simpleName + "[label=" + label + ",weight=" + weight +
                 ",bounds=" + bounds.toString() +

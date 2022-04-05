@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import treemap.*
 import kotlin.math.max
@@ -32,6 +33,7 @@ internal class MapLayoutView : View {
     private var mRectBackgroundPaint: Paint? = null
     private var mRectBorderPaint: Paint? = null
     private var mTextPaint: Paint? = null
+    private var selectedIndices: Int = -1
 
     constructor(context: Context?, attributeSet: AttributeSet?) : super(context) {}
     constructor(context: Context?, model: TreeModel) : super(context) {
@@ -54,6 +56,17 @@ internal class MapLayoutView : View {
         mapLayout!!.layout(mappableItems, Rect(0.0, 0.0, w.toDouble(), h.toDouble()))
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        for (i in mappableItems.indices){
+            val item = mappableItems[i] as AndroidMapItem
+            if(item.isClicked(event!!.x.toDouble(),event.y.toDouble())){
+                selectedIndices = i
+                mapLayout!!.layout(mappableItems,Rect())
+            }
+        }
+        return false
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -72,7 +85,7 @@ internal class MapLayoutView : View {
                 mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
                 // Set up the Paint for the text label
-                mTextPaint!!.color = Color.BLACK
+                mTextPaint!!.color = Color.WHITE
                 mTextPaint!!.textSize = 20f
             }else{
                 // Set up the Paint for the rectangle background
@@ -85,7 +98,7 @@ internal class MapLayoutView : View {
                 mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
                 // Set up the Paint for the text label
-                mTextPaint!!.color = Color.BLACK
+                mTextPaint!!.color = Color.WHITE
 //                mTextPaint!!.textAlign = Paint.Align.RIGHT
             }
             drawRectangle(canvas, item.getBoundsRectF())
@@ -103,11 +116,17 @@ internal class MapLayoutView : View {
 
     private fun drawText(canvas: Canvas, text: String, rectF: RectF) {
         // Don't draw text for small rectangles
-        if (rectF.width() > 30) {
-            val textSize = max(rectF.width() / 7, 12f)
-            mTextPaint!!.textSize = 60f
+        if (rectF.width() > 300) {
+//            val textSize = max(rectF.width() / 7, 12f)
+            mTextPaint!!.textSize = 40f
             canvas.drawText(
-                text, rectF.left + 2, rectF.top + textSize / 2 + rectF.height() / 2,
+                text, rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
+                mTextPaint!!
+            )
+        }else{
+            mTextPaint!!.textSize = 40f
+            canvas.drawText(
+                "...", rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
                 mTextPaint!!
             )
         }
