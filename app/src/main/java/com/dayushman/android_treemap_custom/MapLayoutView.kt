@@ -67,9 +67,9 @@ internal class MapLayoutView : View {
                 mRectBackgroundPaint!!.style = Paint.Style.FILL
 
                 // Set up the Paint for the rectangle border
-                mRectBorderPaint!!.color = Color.BLACK
+                mRectBorderPaint!!.color = Color.WHITE
                 mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
-                mRectBorderPaint!!.strokeWidth = 0f // single-pixel outline
+                mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
                 // Set up the Paint for the text label
                 mTextPaint!!.color = Color.BLACK
@@ -80,12 +80,13 @@ internal class MapLayoutView : View {
                 mRectBackgroundPaint!!.style = Paint.Style.FILL
 
                 // Set up the Paint for the rectangle border
-                mRectBorderPaint!!.color = Color.BLACK
+                mRectBorderPaint!!.color = Color.WHITE
                 mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
-                mRectBorderPaint!!.strokeWidth = 0f // single-pixel outline
+                mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
                 // Set up the Paint for the text label
                 mTextPaint!!.color = Color.BLACK
+//                mTextPaint!!.textAlign = Paint.Align.RIGHT
             }
             drawRectangle(canvas, item.getBoundsRectF())
             drawText(canvas, item.getLabel(), item.getBoundsRectF())
@@ -111,4 +112,6 @@ internal class MapLayoutView : View {
             )
         }
     }
+
+
 }
