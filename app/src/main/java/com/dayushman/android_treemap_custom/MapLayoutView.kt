@@ -15,17 +15,17 @@
  */
 package com.dayushman.android_treemap_custom
 
+import android.R.attr
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import treemap.*
-import kotlin.math.max
+import treemap.Rect
+
 
 internal class MapLayoutView : View {
     private var mapLayout: AbstractMapLayout? = null
@@ -33,6 +33,7 @@ internal class MapLayoutView : View {
     private var mRectBackgroundPaint: Paint? = null
     private var mRectBorderPaint: Paint? = null
     private var mTextPaint: Paint? = null
+    private var mOverlayPaint: Paint? = null
     private var selectedIndices: Int = -1
 
     constructor(context: Context?, attributeSet: AttributeSet?) : super(context) {}
@@ -42,6 +43,7 @@ internal class MapLayoutView : View {
         mTextPaint = Paint()
         mRectBackgroundPaint = Paint()
         mRectBorderPaint = Paint()
+        mOverlayPaint = Paint()
 
 
 
@@ -61,7 +63,8 @@ internal class MapLayoutView : View {
             val item = mappableItems[i] as AndroidMapItem
             if(item.isClicked(event!!.x.toDouble(),event.y.toDouble())){
                 selectedIndices = i
-                mapLayout!!.layout(mappableItems,Rect())
+                Log.e("TAG", "onTouchEvent: ${item.getLabel()}")
+                invalidate()
             }
         }
         return false
@@ -73,36 +76,35 @@ internal class MapLayoutView : View {
         // Draw all the rectangles and their labels
         for (i in mappableItems.indices) {
             val item = mappableItems[i] as AndroidMapItem
-            Log.e("TAG", "onDraw: ${item.getLabel()} $i", )
-            if(item.value < 0){
-                // Set up the Paint for the rectangle background
-                mRectBackgroundPaint!!.color = resources.getColor(R.color.red)
-                mRectBackgroundPaint!!.style = Paint.Style.FILL
+            mRectBackgroundPaint!!.style = Paint.Style.FILL
 
-                // Set up the Paint for the rectangle border
-                mRectBorderPaint!!.color = Color.WHITE
-                mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
-                mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
+            // Set up the Paint for the rectangle border
+            mRectBorderPaint!!.color = Color.WHITE
+            mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
+            mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
-                // Set up the Paint for the text label
-                mTextPaint!!.color = Color.WHITE
-                mTextPaint!!.textSize = 20f
-            }else{
-                // Set up the Paint for the rectangle background
-                mRectBackgroundPaint!!.color = resources.getColor(R.color.green)
-                mRectBackgroundPaint!!.style = Paint.Style.FILL
+            // Set up the Paint for the text label
+            mTextPaint!!.color = Color.WHITE
+            mTextPaint!!.textSize = 20f
 
-                // Set up the Paint for the rectangle border
-                mRectBorderPaint!!.color = Color.WHITE
-                mRectBorderPaint!!.style = Paint.Style.STROKE // outline the rectangle
-                mRectBorderPaint!!.strokeWidth = 6f // single-pixel outline
 
-                // Set up the Paint for the text label
-                mTextPaint!!.color = Color.WHITE
-//                mTextPaint!!.textAlign = Paint.Align.RIGHT
+
+            when {
+                item.value < 0 -> {
+                    // Set up the Paint for the rectangle background
+                    mRectBackgroundPaint!!.color = resources.getColor(R.color.red)
+                }
+                else -> {
+                    // Set up the Paint for the rectangle background
+                    mRectBackgroundPaint!!.color = resources.getColor(R.color.green)
+                }
             }
             drawRectangle(canvas, item.getBoundsRectF())
             drawText(canvas, item.getLabel(), item.getBoundsRectF())
+            if(selectedIndices == i){
+                selectedIndices = -1
+                drawOverLay(canvas,item.getBoundsRectF())
+            }
         }
     }
 
@@ -112,6 +114,7 @@ internal class MapLayoutView : View {
 
         // Draw the rectangle's border
         canvas.drawRect(rectF, mRectBorderPaint!!)
+
     }
 
     private fun drawText(canvas: Canvas, text: String, rectF: RectF) {
@@ -130,6 +133,12 @@ internal class MapLayoutView : View {
                 mTextPaint!!
             )
         }
+    }
+
+    private fun drawOverLay(canvas: Canvas, rectF: RectF){
+        val d = resources.getDrawable(R.drawable.ic_bg_overlay, null)
+        d.setBounds(rectF.left.toInt(),rectF.top.toInt(),rectF.right.toInt(),rectF.bottom.toInt());
+        d.draw(canvas)
     }
 
 

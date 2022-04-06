@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.43020833333333336" />
+        <entry key="app/src/main/res/drawable/ic_bg_overlay.xml" value="0.121" />
         <entry key="app/src/main/res/layout/fragment_treemap.xml" value="0.29393115942028986" />
       </map>
     </option>
