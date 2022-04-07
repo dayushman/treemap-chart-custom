@@ -15,14 +15,12 @@
  */
 package com.dayushman.android_treemap_custom
 
-import android.R.attr
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import treemap.*
 import treemap.Rect
 
@@ -119,20 +117,18 @@ internal class MapLayoutView : View {
 
     private fun drawText(canvas: Canvas, text: String, rectF: RectF) {
         // Don't draw text for small rectangles
-        if (rectF.width() > 300) {
-//            val textSize = max(rectF.width() / 7, 12f)
-            mTextPaint!!.textSize = 40f
-            canvas.drawText(
-                text, rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
-                mTextPaint!!
-            )
-        }else{
-            mTextPaint!!.textSize = 40f
-            canvas.drawText(
-                "...", rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
-                mTextPaint!!
-            )
+        mTextPaint!!.textAlign = Paint.Align.CENTER
+        mTextPaint!!.textSize = 40f
+        val xPos = rectF.width() / 2
+        val yPos = (rectF.height() / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
+        var paintText = text
+        if (rectF.width() <= 300) {
+            paintText = "..."
         }
+        canvas.drawText(
+            paintText, rectF.left + xPos, rectF.top + yPos,
+            mTextPaint!!
+        )
     }
 
     private fun drawOverLay(canvas: Canvas, rectF: RectF){
