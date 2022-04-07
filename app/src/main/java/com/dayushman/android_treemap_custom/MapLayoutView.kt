@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013 Robert Theis
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.dayushman.android_treemap_custom
 
 import android.content.Context
@@ -6,6 +21,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import com.skydoves.balloon.*
 import treemap.*
 import treemap.Rect
@@ -78,11 +95,14 @@ internal class MapLayoutView : View {
             when {
                 item.value < 0 -> {
                     // Set up the Paint for the rectangle background
-                    mRectBackgroundPaint!!.color = resources.getColor(R.color.red)
+                    val color = ColorUtils.blendARGB(resources.getColor(R.color.light_red),resources.getColor(R.color.red),item.value.div(-100).toFloat())
+
+                    mRectBackgroundPaint!!.color = color
                 }
                 else -> {
                     // Set up the Paint for the rectangle background
-                    mRectBackgroundPaint!!.color = resources.getColor(R.color.green)
+                    val color = ColorUtils.blendARGB(resources.getColor(R.color.green),resources.getColor(R.color.dark_green),item.value.div(100).toFloat())
+                    mRectBackgroundPaint!!.color = color
                 }
             }
             drawRectangle(canvas, item.getBoundsRectF())
@@ -105,20 +125,18 @@ internal class MapLayoutView : View {
 
     private fun drawText(canvas: Canvas, text: String, rectF: RectF) {
         // Don't draw text for small rectangles
-        if (rectF.width() > 300) {
-//            val textSize = max(rectF.width() / 7, 12f)
-            mTextPaint!!.textSize = 40f
-            canvas.drawText(
-                text, rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
-                mTextPaint!!
-            )
-        }else{
-            mTextPaint!!.textSize = 40f
-            canvas.drawText(
-                "...", rectF.left + 2, rectF.top + 40f / 2 + rectF.height() / 2,
-                mTextPaint!!
-            )
+        mTextPaint!!.textAlign = Paint.Align.CENTER
+        mTextPaint!!.textSize = 40f
+        val xPos = rectF.width() / 2
+        val yPos = (rectF.height() / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
+        var paintText = text
+        if (rectF.width() <= mTextPaint!!.measureText(text)) {
+            paintText = "..."
         }
+        canvas.drawText(
+            paintText, rectF.left + xPos, rectF.top + yPos,
+            mTextPaint!!
+        )
     }
 
     private fun drawOverLay(canvas: Canvas, rectF: RectF,item: AndroidMapItem){
