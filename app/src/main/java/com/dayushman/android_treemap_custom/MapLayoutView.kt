@@ -21,6 +21,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import treemap.*
 import treemap.Rect
 
@@ -90,11 +92,14 @@ internal class MapLayoutView : View {
             when {
                 item.value < 0 -> {
                     // Set up the Paint for the rectangle background
-                    mRectBackgroundPaint!!.color = resources.getColor(R.color.red)
+                    val color = ColorUtils.blendARGB(resources.getColor(R.color.light_red),resources.getColor(R.color.red),item.value.div(-100).toFloat())
+
+                    mRectBackgroundPaint!!.color = color
                 }
                 else -> {
                     // Set up the Paint for the rectangle background
-                    mRectBackgroundPaint!!.color = resources.getColor(R.color.green)
+                    val color = ColorUtils.blendARGB(resources.getColor(R.color.green),resources.getColor(R.color.dark_green),item.value.div(100).toFloat())
+                    mRectBackgroundPaint!!.color = color
                 }
             }
             drawRectangle(canvas, item.getBoundsRectF())
@@ -122,7 +127,7 @@ internal class MapLayoutView : View {
         val xPos = rectF.width() / 2
         val yPos = (rectF.height() / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
         var paintText = text
-        if (rectF.width() <= 300) {
+        if (rectF.width() <= mTextPaint!!.measureText(text)) {
             paintText = "..."
         }
         canvas.drawText(
