@@ -146,19 +146,18 @@ internal class MapLayoutView : View {
 
         val balloon = Balloon.Builder(context)
             .setHeight(BalloonSizeSpec.WRAP)
+            .setWidth(BalloonSizeSpec.WRAP)
             .setText(item.getLabel())
             .setTextSize(15f)
-            .setArrowOrientation(ArrowOrientation.TOP)
-            .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
+            .setArrowOrientation(ArrowOrientation.START)
             .setArrowSize(10)
-            .setArrowPosition(0.5f)
             .setPadding(12)
             .setCornerRadius(8f)
             .setAutoDismissDuration(1000L)
-            .setBalloonAnimation(BalloonAnimation.ELASTIC)
             .build()
 
-        balloon.showAtCenter(this,rectF.left.roundToInt().minus(rectF.width().roundToInt().div(2)),rectF.top.roundToInt().minus(rectF.height().roundToInt().div(2)))
+
+        balloon.showAsDropDown(this,rectF.left.toInt()+rectF.width().times(0.5).toInt(),rectF.bottom.toInt())
     }
 
 
