@@ -139,7 +139,7 @@ internal class MapLayoutView : View {
         Log.d("TAG", "Rect: ${rectF.left}  ${rectF.right}  ${rectF.top}  ${rectF.bottom}" )
         if(rectF.right <= this.measuredWidth/3){
             val xOff = rectF.right.toInt()
-            val yOff = rectF.centerY().toInt()
+            val yOff = rectF.centerY().toInt()+159
             val balloon = Balloon.Builder(context)
                 .setHeight(BalloonSizeSpec.WRAP)
                 .setWidth(BalloonSizeSpec.WRAP)
