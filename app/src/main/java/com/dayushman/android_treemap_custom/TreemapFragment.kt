@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.dayushman.android_treemap_custom.MapLayoutView
 import com.dayushman.android_treemap_custom.sample.SampleData
-import com.dayushman.android_treemap_custom.sample.SamplePopulationData
 
 class TreemapFragment : Fragment() {
     override fun onCreateView(
@@ -13,6 +12,6 @@ class TreemapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return MapLayoutView(this.activity,SampleData().getTreeModel())
+        return MapLayoutView(this.activity, SampleData().getTreeModel())
     }
 }

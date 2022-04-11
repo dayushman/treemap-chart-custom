@@ -24,13 +24,13 @@ package treemap;
  */
 public interface Mappable
 {
-    public double getSize();
-    public void   setSize(double size);
-    public Rect   getBounds();
-    public void   setBounds(Rect bounds);
-    public void   setBounds(double x, double y, double w, double h);
-    public int    getOrder();
-    public void   setOrder(int order);
-    public int    getDepth();
-    public void   setDepth(int depth);
+    double getSize();
+    void   setSize(double size);
+    Rect   getBounds();
+    void   setBounds(Rect bounds);
+    void   setBounds(double x, double y, double w, double h);
+    int    getOrder();
+    void   setOrder(int order);
+    int    getDepth();
+    void   setDepth(int depth);
 }

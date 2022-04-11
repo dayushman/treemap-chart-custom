@@ -19,5 +19,5 @@ public interface MapModel
      *
      * @return An array of the Mappable objects in this MapModel.
      */
-    public Mappable[] getItems();
+    Mappable[] getItems();
 }

@@ -1,19 +1,18 @@
 package com.dayushman.android_treemap_custom
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import com.skydoves.balloon.*
 import treemap.*
-import treemap.Rect
 import kotlin.math.min
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 
 internal class MapLayoutView : View {
@@ -25,7 +24,7 @@ internal class MapLayoutView : View {
     private var mOverlayPaint: Paint? = null
     private var selectedIndices: Int = -1
 
-    constructor(context: Context?, attributeSet: AttributeSet?) : super(context) {}
+    constructor(context: Context?, attributeSet: AttributeSet?) : super(context)
     constructor(context: Context?, model: TreeModel) : super(context) {
         mapLayout = SquarifiedLayout()
         mappableItems = model.treeItems //getItems();
@@ -33,9 +32,6 @@ internal class MapLayoutView : View {
         mRectBackgroundPaint = Paint()
         mRectBorderPaint = Paint()
         mOverlayPaint = Paint()
-
-
-
 
 
     }
@@ -48,11 +44,10 @@ internal class MapLayoutView : View {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        for (i in mappableItems.indices){
+        for (i in mappableItems.indices) {
             val item = mappableItems[i] as AndroidMapItem
-            if(item.isClicked(event!!.x.toDouble(),event.y.toDouble())){
+            if (item.isClicked(event!!.x.toDouble(), event.y.toDouble())) {
                 selectedIndices = i
-                Log.e("TAG", "onTouchEvent: ${item.getLabel()}")
                 invalidate()
             }
         }
@@ -81,20 +76,28 @@ internal class MapLayoutView : View {
             when {
                 item.value < 0 -> {
                     // Set up the Paint for the rectangle background
-                    val color = ColorUtils.blendARGB(resources.getColor(R.color.light_red),resources.getColor(R.color.red),item.value.div(-100).toFloat())
+                    val color = ColorUtils.blendARGB(
+                        resources.getColor(R.color.light_red),
+                        resources.getColor(R.color.red),
+                        item.value.div(-100).toFloat()
+                    )
 
                     mRectBackgroundPaint!!.color = color
                 }
                 else -> {
                     // Set up the Paint for the rectangle background
-                    val color = ColorUtils.blendARGB(resources.getColor(R.color.green),resources.getColor(R.color.dark_green),item.value.div(100).toFloat())
+                    val color = ColorUtils.blendARGB(
+                        resources.getColor(R.color.green),
+                        resources.getColor(R.color.dark_green),
+                        item.value.div(100).toFloat()
+                    )
                     mRectBackgroundPaint!!.color = color
                 }
             }
             drawRectangle(canvas, item.getBoundsRectF())
             drawText(canvas, item.getLabel(), item.getBoundsRectF())
-            if(selectedIndices == i){
-                drawOverLay(canvas,item.getBoundsRectF(),item)
+            if (selectedIndices == i) {
+                drawOverLay(canvas, item.getBoundsRectF(), item)
                 selectedIndices = -1
             }
         }
@@ -117,7 +120,7 @@ internal class MapLayoutView : View {
         val yPos = (rectF.height() / 2 - (mTextPaint!!.descent() + mTextPaint!!.ascent()) / 2)
         var paintText = text
         if (rectF.width() <= mTextPaint!!.measureText(text) || rectF.height() <= 40f) {
-            mTextPaint!!.textSize = min(mTextPaint!!.textSize,rectF.height())
+            mTextPaint!!.textSize = min(mTextPaint!!.textSize, rectF.height())
             paintText = "..."
         }
         canvas.drawText(
@@ -126,20 +129,23 @@ internal class MapLayoutView : View {
         )
     }
 
-    private fun drawOverLay(canvas: Canvas, rectF: RectF,item: AndroidMapItem){
-        val d = resources.getDrawable(R.drawable.ic_bg_overlay, null)
-        d.setBounds(rectF.left.toInt(),rectF.top.toInt(),rectF.right.roundToInt(),rectF.bottom.roundToInt())
-        d.draw(canvas)
+    private fun drawOverLay(canvas: Canvas, rectF: RectF, item: AndroidMapItem) {
+        val overlayDrawable = resources.getDrawable(R.drawable.ic_bg_overlay, null)
+        overlayDrawable.setBounds(
+            rectF.left.toInt(),
+            rectF.top.toInt(),
+            rectF.right.roundToInt(),
+            rectF.bottom.roundToInt()
+        )
+        overlayDrawable.draw(canvas)
 
 
         /**
          * 79 is the x of first box and 159 is y of the Balloon atm
          */
-        Log.d("TAG", "MapLayout: $measuredWidth  $measuredHeight")
-        Log.d("TAG", "Rect: ${rectF.left}  ${rectF.right}  ${rectF.top}  ${rectF.bottom}" )
-        if(rectF.right <= this.measuredWidth/3){
+        if (rectF.right <= this.measuredWidth / 3) {
             val xOff = rectF.right.toInt()
-            val yOff = rectF.centerY().toInt()+159
+            val yOff = rectF.centerY().toInt() + 159
             val balloon = Balloon.Builder(context)
                 .setHeight(BalloonSizeSpec.WRAP)
                 .setWidth(BalloonSizeSpec.WRAP)
@@ -148,14 +154,12 @@ internal class MapLayoutView : View {
                 .setArrowOrientation(ArrowOrientation.START)
                 .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
                 .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
-                .setArrowPosition(0.1f)
                 .setArrowSize(10)
                 .setPadding(12)
                 .setCornerRadius(8f)
                 .build()
-            Log.d("TAG", "left: $xOff  $yOff ${balloon.getMeasuredHeight()}")
-            balloon.showAsDropDown(this,xOff, yOff)
-        }else if ((this.measuredWidth - rectF.left) <= measuredWidth/3){
+            balloon.showAsDropDown(this, xOff, yOff)
+        } else if ((this.measuredWidth - rectF.left) <= measuredWidth / 3) {
             val xOff = rectF.left.toInt()
             val yOff = rectF.centerY().toInt()
             val balloon = Balloon.Builder(context)
@@ -171,11 +175,9 @@ internal class MapLayoutView : View {
                 .setPadding(12)
                 .setCornerRadius(8f)
                 .build()
-            Log.d("TAG", "right: $xOff  $yOff ${balloon.getMeasuredHeight()}")
-            balloon.showAsDropDown(this,xOff, yOff)
-        }
-        else if (rectF.bottom <= this.measuredHeight/2){
-            val yOff = rectF.bottom.toInt()+159
+            balloon.showAsDropDown(this, xOff, yOff)
+        } else if (rectF.bottom <= this.measuredHeight / 2) {
+            val yOff = rectF.bottom.toInt() + 159
             val xOff = rectF.centerX().toInt()
             val balloon = Balloon.Builder(context)
                 .setHeight(BalloonSizeSpec.WRAP)
@@ -190,9 +192,8 @@ internal class MapLayoutView : View {
                 .setPadding(12)
                 .setCornerRadius(8f)
                 .build()
-            Log.d("TAG", "uppper: $xOff  $yOff ${balloon.getMeasuredHeight()}")
-            balloon.showAsDropDown(this,xOff, yOff)
-        }else{
+            balloon.showAsDropDown(this, xOff, yOff)
+        } else {
             val xOff = rectF.centerX().toInt()
             val yOff = rectF.top.toInt()
             val balloon = Balloon.Builder(context)
@@ -208,8 +209,7 @@ internal class MapLayoutView : View {
                 .setPadding(12)
                 .setCornerRadius(8f)
                 .build()
-            balloon.showAsDropDown(this,xOff, yOff)
-            Log.d("TAG", "lower: $xOff  $yOff ${balloon.getMeasuredHeight()}")
+            balloon.showAsDropDown(this, xOff, yOff)
 
         }
 

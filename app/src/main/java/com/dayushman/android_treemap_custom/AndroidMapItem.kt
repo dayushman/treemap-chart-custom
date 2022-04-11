@@ -5,7 +5,7 @@ import treemap.MapItem
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AndroidMapItem( private val label: String,val value: Double, weight: Double) : MapItem(),
+class AndroidMapItem(private val label: String, val value: Double, weight: Double) : MapItem(),
     AndroidMappable, Comparable<AndroidMapItem> {
     private val weight = 0.0
     override fun getLabel(): String {
@@ -23,9 +23,9 @@ class AndroidMapItem( private val label: String,val value: Double, weight: Doubl
         )
     }
 
-    fun isClicked(x : Double,y : Double) : Boolean{
-        if(bounds.x < x && ((bounds.x + bounds.w)>=x)){
-            if(bounds.y < y && ((bounds.y+bounds.h)>=y))
+    fun isClicked(x: Double, y: Double): Boolean {
+        if (bounds.x < x && ((bounds.x + bounds.w) >= x)) {
+            if (bounds.y < y && ((bounds.y + bounds.h) >= y))
                 return true
         }
         return false

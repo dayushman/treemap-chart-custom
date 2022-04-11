@@ -14,7 +14,7 @@ package treemap;
 public class SliceLayout extends AbstractMapLayout
 {
     public static final int BEST=2, ALTERNATE=3;
-    private int orientation;
+    private final int orientation;
     
     public SliceLayout()
     {

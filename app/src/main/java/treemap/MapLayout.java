@@ -28,7 +28,7 @@ public interface MapLayout
      * @param model The MapModel.
      * @param bounds The boundsing rectangle for the layout.
      */
-    public void layout(MapModel model, Rect bounds);
+    void layout(MapModel model, Rect bounds);
     
     /**
      * Return a human-readable name for this layout;
@@ -36,7 +36,7 @@ public interface MapLayout
      *
      * @return String naming this layout.
      */
-    public String getName();
+    String getName();
     
     /**
      * Return a longer description of this layout;
@@ -45,5 +45,5 @@ public interface MapLayout
      *
      * @return String describing this layout.
      */
-    public String getDescription();
+    String getDescription();
 }
