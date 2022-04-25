@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.graphics.ColorUtils
-import com.skydoves.balloon.*
 import treemap.*
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -138,81 +137,6 @@ internal class MapLayoutView : View {
             rectF.bottom.roundToInt()
         )
         overlayDrawable.draw(canvas)
-
-
-        /**
-         * 79 is the x of first box and 159 is y of the Balloon atm
-         */
-        if (rectF.right <= this.measuredWidth / 3) {
-            val xOff = rectF.right.toInt()
-            val yOff = rectF.centerY().toInt() + 159
-            val balloon = Balloon.Builder(context)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setText(item.getLabel())
-                .setTextSize(15f)
-                .setArrowOrientation(ArrowOrientation.START)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
-                .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
-                .setArrowSize(10)
-                .setPadding(12)
-                .setCornerRadius(8f)
-                .build()
-            balloon.showAsDropDown(this, xOff, yOff)
-        } else if ((this.measuredWidth - rectF.left) <= measuredWidth / 3) {
-            val xOff = rectF.left.toInt()
-            val yOff = rectF.centerY().toInt()
-            val balloon = Balloon.Builder(context)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setText(item.getLabel())
-                .setTextSize(15f)
-                .setArrowOrientation(ArrowOrientation.END)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
-                .setArrowPosition(0.1f)
-                .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
-                .setArrowSize(10)
-                .setPadding(12)
-                .setCornerRadius(8f)
-                .build()
-            balloon.showAsDropDown(this, xOff, yOff)
-        } else if (rectF.bottom <= this.measuredHeight / 2) {
-            val yOff = rectF.bottom.toInt() + 159
-            val xOff = rectF.centerX().toInt()
-            val balloon = Balloon.Builder(context)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setText(item.getLabel())
-                .setTextSize(15f)
-                .setArrowOrientation(ArrowOrientation.TOP)
-                .setArrowPosition(0.1f)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
-                .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
-                .setArrowSize(10)
-                .setPadding(12)
-                .setCornerRadius(8f)
-                .build()
-            balloon.showAsDropDown(this, xOff, yOff)
-        } else {
-            val xOff = rectF.centerX().toInt()
-            val yOff = rectF.top.toInt()
-            val balloon = Balloon.Builder(context)
-                .setHeight(BalloonSizeSpec.WRAP)
-                .setWidth(BalloonSizeSpec.WRAP)
-                .setText(item.getLabel())
-                .setTextSize(15f)
-                .setArrowOrientation(ArrowOrientation.BOTTOM)
-                .setArrowPosition(0.1f)
-                .setArrowPositionRules(ArrowPositionRules.ALIGN_BALLOON)
-                .setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
-                .setArrowSize(10)
-                .setPadding(12)
-                .setCornerRadius(8f)
-                .build()
-            balloon.showAsDropDown(this, xOff, yOff)
-
-        }
-
     }
 
 
